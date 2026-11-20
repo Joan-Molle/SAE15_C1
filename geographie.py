@@ -1,18 +1,17 @@
 
+
 import pandas as pd
 
 
-# 1. LECTURE DU FICHIER
+# 1. LIRE LE FICHIER
 
 
 df = pd.read_csv("sup_support.txt", sep=";", dtype=str)
 
-# Afficher les 5 premières lignes
-print("Aperçu du fichier :")
+print("Les 5 premières lignes :")
 print(df.head())
 
-# Afficher les noms des colonnes
-print("\nListe des colonnes :")
+print("\nLes colonnes :")
 print(df.columns.tolist())
 
 
@@ -42,119 +41,213 @@ descriptions = {
     "COM_CD_INSEE": "Code INSEE de la commune"
 }
 
-# Afficher les colonnes et leurs descriptions
 print("\nDescription des colonnes :")
 
 for colonne in df.columns:
     print(colonne, ":", descriptions.get(colonne, "Non identifiée"))
 
-
 # 3. DICTIONNAIRE DES DEPARTEMENTS
 
 
 noms_departements = {
-    "01": "Ain",
-    "02": "Aisne",
-    "03": "Allier",
-    "04": "Alpes-de-Haute-Provence",
-    "05": "Hautes-Alpes",
-    "06": "Alpes-Maritimes",
-    "07": "Ardèche",
-    "08": "Ardennes",
-    "09": "Ariège",
-    "10": "Aube",
-    "11": "Aude",
-    "12": "Aveyron",
-    "13": "Bouches-du-Rhône",
-    "14": "Calvados",
-    "15": "Cantal",
-    "16": "Charente",
-    "17": "Charente-Maritime",
-    "18": "Cher",
-    "19": "Corrèze",
-    "2A": "Corse-du-Sud",
-    "2B": "Haute-Corse",
-    "21": "Côte-d'Or",
-    "22": "Côtes-d'Armor",
-    "23": "Creuse",
-    "24": "Dordogne",
-    "25": "Doubs",
-    "26": "Drôme",
-    "27": "Eure",
-    "28": "Eure-et-Loir",
-    "29": "Finistère",
-    "30": "Gard",
-    "31": "Haute-Garonne",
-    "32": "Gers",
-    "33": "Gironde",
-    "34": "Hérault",
-    "35": "Ille-et-Vilaine",
-    "36": "Indre",
-    "37": "Indre-et-Loire",
-    "38": "Isère",
-    "39": "Jura",
-    "40": "Landes",
-    "41": "Loir-et-Cher",
-    "42": "Loire",
-    "43": "Haute-Loire",
-    "44": "Loire-Atlantique",
-    "45": "Loiret",
-    "46": "Lot",
-    "47": "Lot-et-Garonne",
-    "48": "Lozère",
-    "49": "Maine-et-Loire",
-    "50": "Manche",
-    "51": "Marne",
-    "52": "Haute-Marne",
-    "53": "Mayenne",
-    "54": "Meurthe-et-Moselle",
-    "55": "Meuse",
-    "56": "Morbihan",
-    "57": "Moselle",
-    "58": "Nièvre",
-    "59": "Nord",
-    "60": "Oise",
-    "61": "Orne",
-    "62": "Pas-de-Calais",
-    "63": "Puy-de-Dôme",
-    "64": "Pyrénées-Atlantiques",
-    "65": "Hautes-Pyrénées",
-    "66": "Pyrénées-Orientales",
-    "67": "Bas-Rhin",
-    "68": "Haut-Rhin",
-    "69": "Rhône",
-    "70": "Haute-Saône",
-    "71": "Saône-et-Loire",
-    "72": "Sarthe",
-    "73": "Savoie",
-    "74": "Haute-Savoie",
-    "75": "Paris",
-    "76": "Seine-Maritime",
-    "77": "Seine-et-Marne",
-    "78": "Yvelines",
-    "79": "Deux-Sèvres",
-    "80": "Somme",
-    "81": "Tarn",
-    "82": "Tarn-et-Garonne",
-    "83": "Var",
-    "84": "Vaucluse",
-    "85": "Vendée",
-    "86": "Vienne",
-    "87": "Haute-Vienne",
-    "88": "Vosges",
-    "89": "Yonne",
+    "01": "Ain", "02": "Aisne", "03": "Allier",
+    "04": "Alpes-de-Haute-Provence", "05": "Hautes-Alpes",
+    "06": "Alpes-Maritimes", "07": "Ardèche",
+    "08": "Ardennes", "09": "Ariège", "10": "Aube",
+    "11": "Aude", "12": "Aveyron",
+    "13": "Bouches-du-Rhône", "14": "Calvados",
+    "15": "Cantal", "16": "Charente",
+    "17": "Charente-Maritime", "18": "Cher",
+    "19": "Corrèze", "2A": "Corse-du-Sud",
+    "2B": "Haute-Corse", "21": "Côte-d'Or",
+    "22": "Côtes-d'Armor", "23": "Creuse",
+    "24": "Dordogne", "25": "Doubs", "26": "Drôme",
+    "27": "Eure", "28": "Eure-et-Loir",
+    "29": "Finistère", "30": "Gard",
+    "31": "Haute-Garonne", "32": "Gers",
+    "33": "Gironde", "34": "Hérault",
+    "35": "Ille-et-Vilaine", "36": "Indre",
+    "37": "Indre-et-Loire", "38": "Isère",
+    "39": "Jura", "40": "Landes",
+    "41": "Loir-et-Cher", "42": "Loire",
+    "43": "Haute-Loire", "44": "Loire-Atlantique",
+    "45": "Loiret", "46": "Lot",
+    "47": "Lot-et-Garonne", "48": "Lozère",
+    "49": "Maine-et-Loire", "50": "Manche",
+    "51": "Marne", "52": "Haute-Marne",
+    "53": "Mayenne", "54": "Meurthe-et-Moselle",
+    "55": "Meuse", "56": "Morbihan",
+    "57": "Moselle", "58": "Nièvre",
+    "59": "Nord", "60": "Oise", "61": "Orne",
+    "62": "Pas-de-Calais", "63": "Puy-de-Dôme",
+    "64": "Pyrénées-Atlantiques", "65": "Hautes-Pyrénées",
+    "66": "Pyrénées-Orientales", "67": "Bas-Rhin",
+    "68": "Haut-Rhin", "69": "Rhône",
+    "70": "Haute-Saône", "71": "Saône-et-Loire",
+    "72": "Sarthe", "73": "Savoie",
+    "74": "Haute-Savoie", "75": "Paris",
+    "76": "Seine-Maritime", "77": "Seine-et-Marne",
+    "78": "Yvelines", "79": "Deux-Sèvres",
+    "80": "Somme", "81": "Tarn",
+    "82": "Tarn-et-Garonne", "83": "Var",
+    "84": "Vaucluse", "85": "Vendée",
+    "86": "Vienne", "87": "Haute-Vienne",
+    "88": "Vosges", "89": "Yonne",
     "90": "Territoire de Belfort",
-    "91": "Essonne",
-    "92": "Hauts-de-Seine",
-    "93": "Seine-Saint-Denis",
-    "94": "Val-de-Marne",
+    "91": "Essonne", "92": "Hauts-de-Seine",
+    "93": "Seine-Saint-Denis", "94": "Val-de-Marne",
     "95": "Val-d'Oise",
-    "971": "Guadeloupe",
-    "972": "Martinique",
-    "973": "Guyane",
-    "974": "La Réunion",
+    "971": "Guadeloupe", "972": "Martinique",
+    "973": "Guyane", "974": "La Réunion",
     "976": "Mayotte"
 }
 
-print("\nNombre de départements dans le dictionnaire :",
-      len(noms_departements))
+
+# 4. DICTIONNAIRE DES REGIONS
+
+
+regions_departements = {
+    "Normandie": ["14", "27", "50", "61", "76"],
+    "Île-de-France": ["75", "77", "78", "91", "92", "93", "94", "95"],
+    "Bretagne": ["22", "29", "35", "56"],
+    "Hauts-de-France": ["02", "59", "60", "62", "80"],
+    "Grand Est": ["08", "10", "51", "52", "54", "55", "57", "67", "68", "88"],
+    "Pays de la Loire": ["44", "49", "53", "72", "85"],
+    "Centre-Val de Loire": ["18", "28", "36", "37", "41", "45"],
+    "Bourgogne-Franche-Comté": ["21", "25", "39", "58", "70", "71", "89", "90"],
+    "Nouvelle-Aquitaine": ["16", "17", "19", "23", "24", "33", "40", "47", "64", "79", "86", "87"],
+    "Occitanie": ["09", "11", "12", "30", "31", "32", "34", "46", "48", "65", "66", "81", "82"],
+    "Auvergne-Rhône-Alpes": ["01", "03", "07", "15", "26", "38", "42", "43", "63", "69", "73", "74"],
+    "Provence-Alpes-Côte d'Azur": ["04", "05", "06", "13", "83", "84"],
+    "Corse": ["2A", "2B"],
+    "Guadeloupe": ["971"],
+    "Martinique": ["972"],
+    "Guyane": ["973"],
+    "La Réunion": ["974"],
+    "Mayotte": ["976"]
+}
+
+
+# 5. EXTRAIRE LE DEPARTEMENT
+
+
+def extraire_departement(code):
+
+    code = str(code).strip().upper()
+
+    if code.startswith("2A") or code.startswith("2B"):
+        return code[:2]
+
+    if code.startswith(("971", "972", "973", "974", "976")):
+        return code[:3]
+
+    return code[:2]
+
+
+
+# 6. FONCTION USED_DATA
+
+
+def used_data(zone):
+
+    # Lire le fichier
+    df = pd.read_csv("sup_support.txt", sep=";", dtype=str)
+
+    # Trouver le département
+    df["DEPARTEMENT"] = df["COM_CD_INSEE"].apply(extraire_departement)
+
+    # Rechercher la zone
+    zone = zone.strip().casefold()
+
+    if zone == "france":
+        resultat = df
+
+    elif zone == "paris":
+        resultat = df[df["DEPARTEMENT"] == "75"]
+
+    else:
+        resultat = df.iloc[0:0]
+
+        # Chercher une région
+        for region in regions_departements:
+
+            if region.casefold() == zone:
+                resultat = df[
+                    df["DEPARTEMENT"].isin(regions_departements[region])
+                ]
+
+        # Chercher un département
+        for numero in noms_departements:
+
+            if numero.casefold() == zone or noms_departements[numero].casefold() == zone:
+                resultat = df[df["DEPARTEMENT"] == numero]
+
+    if resultat.empty:
+        print("Aucune installation trouvée pour cette zone.")
+
+    # Calculer le nombre d'installations
+    nombre = len(resultat)
+
+    return resultat, nombre
+
+
+
+# 7. CLASSEMENT PAR ECHELLE (3.1)
+
+
+def classement_echelles():
+
+    # Lire les données
+    df = pd.read_csv("sup_support.txt", sep=";", dtype=str)
+
+    # Trouver les départements
+    df["DEPARTEMENT"] = df["COM_CD_INSEE"].apply(extraire_departement)
+
+    # Ajouter les régions
+    df["REGION"] = ""
+
+    for region in regions_departements:
+
+        for departement in regions_departements[region]:
+
+            df.loc[df["DEPARTEMENT"] == departement, "REGION"] = region
+
+    # Compter les installations
+    nombre_france = len(df)
+
+    nombre_regions = df.groupby("REGION").size()
+
+    nombre_departements = df.groupby("DEPARTEMENT").size()
+
+    nombre_communes = df.groupby("COM_CD_INSEE").size()
+
+    # Afficher les résultats
+    print("\nNOMBRE D'INSTALLATIONS EN FRANCE :")
+    print(nombre_france)
+
+    print("\nNOMBRE D'INSTALLATIONS PAR REGION :")
+    print(nombre_regions)
+
+    print("\nNOMBRE D'INSTALLATIONS PAR DEPARTEMENT :")
+    print(nombre_departements)
+
+    print("\nNOMBRE D'INSTALLATIONS PAR COMMUNE :")
+    print(nombre_communes)
+
+    return nombre_france, nombre_regions, nombre_departements, nombre_communes
+
+
+
+# 8. TESTS DES FONCTIONS
+
+# Exemple : récupérer les installations de Normandie
+installations, nombre = used_data("Normandie")
+
+print("\nINSTALLATIONS EN NORMANDIE :")
+print(installations.head())
+
+print("Nombre total :", nombre)
+
+
+# Afficher le classement des échelles
+classement_echelles()
