@@ -391,6 +391,11 @@ positions = range(len(nombre_departements))
 # On affiche des barres fines et espacées
 plt.bar(positions, nombre_departements.values, width=0.45)
 
+# On ajoute une légende pour expliquer le code 98
+plt.plot([], [], " ", label="98 : Territoires d'outre-mer regroupés")
+plt.legend()
+
+
 # On affiche tous les numéros des départements
 plt.xticks(positions, nombre_departements.index, rotation=60, fontsize=9)
 
