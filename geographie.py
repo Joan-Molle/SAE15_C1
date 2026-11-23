@@ -366,52 +366,302 @@ classement_echelles()
 
 
 
+
+
 # 9. GRAPHIQUE PAR DEPARTEMENT (3.2)
 
-# On copie les données
+
+# OBJECTIF :
+# Cette partie permet de représenter graphiquement le nombre
+# d'installations radioélectriques présentes dans chaque département.
+#
+# Chaque barre représente un département.
+# La hauteur de la barre représente le nombre d'installations.
+#
+# Ce graphique permet de comparer facilement les départements
+# et de voir lesquels possèdent le plus d'installations.
+
+
+
+# COPIER LES DONNEES
+
+
+# On crée une copie du tableau df.
+# df contient les données qui ont été lues dans le fichier
+# sup_support.txt au début du programme.
+#
+# copy() permet de créer un nouveau tableau indépendant.
+# Cela évite de modifier directement le tableau de départ.
+#
+# Le nouveau tableau est enregistré dans la variable
+# nombre_departements.
 nombre_departements = df.copy()
 
-# On récupère les départements
+
+
+# RECUPERER LES DEPARTEMENTS
+
+
+# On ajoute une nouvelle colonne appelée DEPARTEMENT.
+#
+# COM_CD_INSEE est une colonne qui contient les codes INSEE
+# des communes où se trouvent les installations.
+#
+# apply() permet d'appliquer une fonction à chaque valeur
+# de cette colonne.
+#
+# Ici, on applique la fonction extraire_departement().
+# Cette fonction récupère le numéro du département à partir
+# du code INSEE de chaque commune.
+#
+# Exemple :
+# 76540 devient 76 (Seine-Maritime).
+# 27100 devient 27 (Eure).
+# 97101 devient 971 (Guadeloupe).
+#
+# Les résultats sont enregistrés dans la nouvelle colonne
+# DEPARTEMENT.
 nombre_departements["DEPARTEMENT"] = nombre_departements["COM_CD_INSEE"].apply(extraire_departement)
 
-# On supprime le code 97
+
+
+#  SUPPRIMER LE CODE 97
+
+
+# On filtre le tableau pour supprimer les lignes
+# dont le département est exactement égal à "97".
+#
+# Le symbole != signifie "différent de".
+#
+# Cela signifie que l'on conserve uniquement les lignes
+# pour lesquelles le département est différent de 97.
+#
+# Les codes 971, 972, 973, 974 et 976 sont conservés,
+# car ils sont différents du code exact "97".
+#
+# Cette opération permet de ne pas afficher une barre
+# supplémentaire correspondant au code 97.
 nombre_departements = nombre_departements[
     nombre_departements["DEPARTEMENT"] != "97"
 ]
 
-# On compte les installations par département
+
+
+# COMPTER LES INSTALLATIONS PAR DEPARTEMENT
+
+
+# On utilise groupby() pour regrouper les installations
+# qui appartiennent au même département.
+#
+# Par exemple, toutes les installations du département 76
+# sont regroupées ensemble.
+#
+# size() permet ensuite de compter le nombre de lignes
+# dans chaque groupe.
+#
+# Chaque ligne représentant une installation,
+# on obtient donc le nombre d'installations par département.
+#
+# Le résultat remplace le tableau précédent et est conservé
+# dans la variable nombre_departements.
 nombre_departements = nombre_departements.groupby("DEPARTEMENT").size()
 
-# On crée un graphique très large
+
+
+# CREER UN GRAPHIQUE PLUS LARGE
+
+
+# plt.figure() permet de créer une nouvelle fenêtre graphique.
+#
+# figsize permet de définir les dimensions du graphique.
+#
+# Le premier nombre (24) correspond à la largeur.
+# Le deuxième nombre (8) correspond à la hauteur.
+#
+# Une largeur importante permet de mieux espacer
+# les différents départements sur l'axe horizontal.
+#
+# Cela rend les numéros plus faciles à lire.
 plt.figure(figsize=(24, 8))
 
-# On crée un emplacement pour chaque département
+
+
+# CREER UN EMPLACEMENT POUR CHAQUE DEPARTEMENT
+
+
+# On crée une suite de positions numériques.
+#
+# len(nombre_departements) permet de connaître le nombre
+# total de départements présents dans notre tableau.
+#
+# range() crée une suite de nombres qui commence à 0
+# et se termine juste avant le nombre total de départements.
+#
+# Par exemple, si on a 5 départements :
+# les positions seront 0, 1, 2, 3 et 4.
+#
+# Chaque département aura donc son propre emplacement
+# sur l'axe horizontal du graphique.
+#
+# Ces positions sont enregistrées dans la variable positions.
 positions = range(len(nombre_departements))
 
-# On affiche des barres fines et espacées
+
+
+# AFFICHER LES BARRES DU GRAPHIQUE
+
+
+# plt.bar() permet de créer un graphique en barres verticales.
+#
+# Le premier paramètre (positions) indique l'emplacement
+# de chaque barre sur l'axe horizontal.
+#
+# Le deuxième paramètre (nombre_departements.values)
+# correspond au nombre d'installations de chaque département.
+#
+# width=0.45 définit la largeur de chaque barre.
+#
+# Une largeur de 0.45 permet de laisser un espace
+# entre les barres pour éviter qu'elles soient trop serrées.
+#
+# La hauteur de chaque barre dépend du nombre d'installations.
 plt.bar(positions, nombre_departements.values, width=0.45)
 
-# On ajoute une légende pour expliquer le code 98
+
+
+#  AJOUTER UNE LEGENDE POUR LE CODE 98
+
+
+# On ajoute une légende pour expliquer la signification
+# du code 98 présent sur l'axe horizontal.
+#
+# plt.plot([], [], " ") crée un élément vide.
+# Il ne dessine aucune ligne ni aucun point sur le graphique.
+#
+# label permet de donner un texte à cet élément.
+# Ce texte sera utilisé dans la légende.
+#
+# plt.legend() affiche ensuite la légende sur le graphique.
+#
+# Ici, on précise que le code 98 regroupe les territoires
+# dont le code INSEE commence par 98.
 plt.plot([], [], " ", label="98 : Territoires d'outre-mer regroupés")
 plt.legend()
 
 
-# On affiche tous les numéros des départements
+
+#  AFFICHER LES NUMEROS DES DEPARTEMENTS
+
+
+# plt.xticks() permet de personnaliser les graduations
+# et les étiquettes de l'axe horizontal.
+#
+# positions indique où placer les numéros.
+#
+# nombre_departements.index contient les codes
+# des départements à afficher.
+#
+# rotation=60 incline les numéros de 60 degrés.
+# Cela permet de mieux distinguer les numéros.
+#
+# fontsize=9 définit la taille de l'écriture.
+# Une petite taille permet d'afficher tous les départements
+# sans trop encombrer le graphique.
 plt.xticks(positions, nombre_departements.index, rotation=60, fontsize=9)
 
-# On ajoute les titres
+
+
+# AJOUTER LES TITRES DU GRAPHIQUE
+
+
+# plt.title() ajoute le titre principal du graphique.
+# Il permet de comprendre immédiatement ce que représente
+# le graphique.
+# fontsize=16 définit la taille du titre.
 plt.title("Nombre d'installations par département", fontsize=16)
+
+# plt.xlabel() donne un nom à l'axe horizontal.
+# Ici, l'axe horizontal représente les départements.
 plt.xlabel("Départements", fontsize=12)
+
+# plt.ylabel() donne un nom à l'axe vertical.
+# Ici, l'axe vertical représente le nombre d'installations.
 plt.ylabel("Nombre d'installations", fontsize=12)
 
-# On règle l'échelle verticale
+
+
+# REGLER L'ECHELLE VERTICALE
+
+
+# plt.yticks() permet de définir les valeurs affichées
+# sur l'axe vertical.
+#
+# range(0, 5501, 500) signifie :
+# - commencer à 0 ;
+# - aller jusqu'à 5500 inclus ;
+# - augmenter de 500 à chaque étape.
+#
+# L'échelle affichera donc :
+# 0, 500, 1000, 1500, 2000, etc., jusqu'à 5500.
+#
+# Cela permet de comparer plus facilement la hauteur
+# des barres et de connaître approximativement
+# le nombre d'installations de chaque département.
 plt.yticks(range(0, 5501, 500))
 
-# On ajoute une grille horizontale
+
+
+# AJOUTER UNE GRILLE HORIZONTALE
+
+
+# plt.grid() permet d'ajouter des lignes de repère
+# sur le graphique.
+#
+# axis="y" signifie que les lignes seront uniquement
+# horizontales, en suivant l'axe vertical.
+#
+# linestyle="--" donne un aspect en pointillés aux lignes.
+#
+# alpha=0.3 définit la transparence des lignes.
+# Plus cette valeur est proche de 0, plus les lignes sont discrètes.
+#
+# Cette grille permet de mieux comparer les hauteurs
+# des différentes barres.
 plt.grid(axis="y", linestyle="--", alpha=0.3)
+
+
+
+# 13. PLACER LA GRILLE DERRIERE LES BARRES
+
+
+# plt.gca() permet de récupérer les axes du graphique actuel.
+#
+# set_axisbelow(True) permet de placer la grille
+# derrière les barres.
+#
+# Cela évite que les lignes de la grille passent
+# visuellement devant les barres et gênent la lecture.
 plt.gca().set_axisbelow(True)
 
-# On explique le code 98
+
+
+#EXPLIQUER LE CODE 98 SOUS LE GRAPHIQUE
+
+
+# plt.figtext() permet d'ajouter du texte directement
+# dans la fenêtre générale du graphique.
+#
+# 0.5 correspond à la position horizontale du texte :
+# le texte est placé au milieu du graphique.
+#
+# 0.01 correspond à sa position verticale :
+# le texte est placé près du bas de la fenêtre.
+#
+# Le texte explique ce que représente le code 98.
+#
+# ha="center" permet de centrer le texte.
+#
+# fontsize=10 définit la taille de l'écriture.
 plt.figtext(
     0.5, 0.01,
     "98 : territoires dont le code INSEE commence par 98.",
@@ -419,8 +669,36 @@ plt.figtext(
     fontsize=10
 )
 
-# On laisse de l'espace en bas pour lire les départements
+
+
+# AJUSTER LES ESPACES DU GRAPHIQUE
+
+
+# plt.subplots_adjust() permet de régler les marges
+# autour du graphique.
+#
+# bottom=0.22 laisse de la place en bas pour les numéros
+# des départements qui sont inclinés.
+#
+# left=0.07 règle l'espace sur le côté gauche.
+#
+# right=0.98 règle l'espace sur le côté droit.
+#
+# top=0.90 laisse de la place au-dessus pour le titre.
+#
+# Ces réglages évitent que les textes soient coupés
+# ou trop proches des bords de la fenêtre.
 plt.subplots_adjust(bottom=0.22, left=0.07, right=0.98, top=0.90)
 
-# On affiche le graphique
+
+
+# AFFICHER LE GRAPHIQUE
+
+
+# plt.show() permet d'afficher le graphique terminé.
+#
+# Sans cette instruction, le graphique peut ne pas apparaître
+# dans certaines configurations d'exécution.
+#
+# C'est la dernière étape de notre programme graphique.
 plt.show()
