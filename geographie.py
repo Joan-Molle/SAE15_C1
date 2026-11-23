@@ -366,8 +366,6 @@ classement_echelles()
 
 
 
-
-
 # 9. GRAPHIQUE PAR DEPARTEMENT (3.2)
 
 # On copie les données
@@ -384,26 +382,30 @@ nombre_departements = nombre_departements[
 # On compte les installations par département
 nombre_departements = nombre_departements.groupby("DEPARTEMENT").size()
 
-# On crée un graphique très large
-plt.figure(figsize=(22, 9))
+# On crée un graphique plus grand
+plt.figure(figsize=(20, 8))
 
-# On affiche les barres avec plus d'espace
-plt.bar(nombre_departements.index, nombre_departements.values, width=0.5)
+# On affiche les barres
+plt.bar(nombre_departements.index, nombre_departements.values, width=0.7)
 
 # On ajoute les titres
-plt.title("Nombre d'installations par département", fontsize=17)
+plt.title("Nombre d'installations par département", fontsize=16)
 plt.xlabel("Départements", fontsize=12)
 plt.ylabel("Nombre d'installations", fontsize=12)
 
-# On espace et incline les numéros des départements
-plt.xticks(rotation=60, fontsize=10)
+# On affiche un département sur deux pour éviter que les chiffres se chevauchent
+plt.xticks(
+    range(0, len(nombre_departements), 2),
+    nombre_departements.index[::2],
+    rotation=45,
+    fontsize=10
+)
 
-# On règle l'échelle verticale de 500 en 500
-maximum = nombre_departements.max()
-plt.yticks(range(0, maximum + 501, 500))
+# On règle l'échelle verticale
+plt.yticks(range(0, 5501, 500))
 
-# On ajoute une grille horizontale légère
-plt.grid(axis="y", linestyle="--", alpha=0.3)
+# On ajoute une grille horizontale
+plt.grid(axis="y", alpha=0.3)
 plt.gca().set_axisbelow(True)
 
 # On explique le code 98
@@ -414,8 +416,8 @@ plt.figtext(
     fontsize=10
 )
 
-# On laisse de l'espace autour du graphique
-plt.subplots_adjust(bottom=0.18, left=0.08, right=0.98, top=0.92)
+# On ajuste la présentation
+plt.tight_layout(rect=[0, 0.04, 1, 1])
 
 # On affiche le graphique
 plt.show()
