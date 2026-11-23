@@ -16,7 +16,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_32f0851957fb68fd350fc5e389cf7853 {
+                #map_d641d3bb4bed170db1e1aac09f2eda68 {
                     position: relative;
                     width: 100.0vw;
                     height: 100.0vh;
@@ -261,14 +261,14 @@
 <body>
     
     
-            <div class="folium-map" id="map_32f0851957fb68fd350fc5e389cf7853" ></div>
+            <div class="folium-map" id="map_d641d3bb4bed170db1e1aac09f2eda68" ></div>
         
 </body>
 <script>
     
     
-            var map_32f0851957fb68fd350fc5e389cf7853 = L.map(
-                "map_32f0851957fb68fd350fc5e389cf7853",
+            var map_d641d3bb4bed170db1e1aac09f2eda68 = L.map(
+                "map_d641d3bb4bed170db1e1aac09f2eda68",
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -286,13 +286,13 @@
 
         
     
-            map_32f0851957fb68fd350fc5e389cf7853.fitBounds(
+            map_d641d3bb4bed170db1e1aac09f2eda68.fitBounds(
                 [[-25, -160], [52, 175]],
                 {}
             );
         
     
-            var tile_layer_3e1beea62c3d39ae1d0823ca92c55b0d = L.tileLayer(
+            var tile_layer_9e0cdd6be7530653678661ea88130e78 = L.tileLayer(
                 "https://data.geopf.fr/wmts?REQUEST=GetTile\u0026SERVICE=WMTS\u0026VERSION=1.0.0\u0026STYLE=normal\u0026TILEMATRIXSET=PM\u0026FORMAT=image/png\u0026LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2\u0026TILEMATRIX={z}\u0026TILEROW={y}\u0026TILECOL={x}",
                 {
   "minZoom": 0,
@@ -309,10 +309,10 @@
             );
         
     
-            tile_layer_3e1beea62c3d39ae1d0823ca92c55b0d.addTo(map_32f0851957fb68fd350fc5e389cf7853);
+            tile_layer_9e0cdd6be7530653678661ea88130e78.addTo(map_d641d3bb4bed170db1e1aac09f2eda68);
         
     
-            var tile_layer_980ef997a17e0df5badfd6c395047c53 = L.tileLayer(
+            var tile_layer_7d2a5055518b60ae6056bd230d4759cd = L.tileLayer(
                 "https://data.geopf.fr/wmts?REQUEST=GetTile\u0026SERVICE=WMTS\u0026VERSION=1.0.0\u0026STYLE=normal\u0026TILEMATRIXSET=PM\u0026FORMAT=image/jpeg\u0026LAYER=ORTHOIMAGERY.ORTHOPHOTOS\u0026TILEMATRIX={z}\u0026TILEROW={y}\u0026TILECOL={x}",
                 {
   "minZoom": 0,
@@ -329,7 +329,7 @@
             );
         
     
-            var tile_layer_97b2cf553a321817589c3616e207f1ca = L.tileLayer(
+            var tile_layer_30d38627175f06af0b62180cfab1a90a = L.tileLayer(
                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {
   "minZoom": 0,
@@ -346,7 +346,7 @@
             );
         
     
-            var fast_marker_cluster_fa99f6e2334fc474cec6a20fae660a4a = (function(){
+            var fast_marker_cluster_3224af5e3417c52776dd96d07ee4b9a6 = (function(){
                 var callback = 
 function (row) {
     var marker = L.circleMarker(new L.LatLng(row[0], row[1]),
@@ -366,33 +366,33 @@ function (row) {
                     marker.addTo(cluster);
                 }
 
-                cluster.addTo(map_32f0851957fb68fd350fc5e389cf7853);
+                cluster.addTo(map_d641d3bb4bed170db1e1aac09f2eda68);
                 return cluster;
             })();
         
     
-            fast_marker_cluster_fa99f6e2334fc474cec6a20fae660a4a.addTo(map_32f0851957fb68fd350fc5e389cf7853);
+            fast_marker_cluster_3224af5e3417c52776dd96d07ee4b9a6.addTo(map_d641d3bb4bed170db1e1aac09f2eda68);
         
     
-            var layer_control_c4cf0a2b1a808ccb2748b04eb9aab109_layers = {
+            var layer_control_fc951bb73080951f397c6c4524c3eaeb_layers = {
                 base_layers : {
-                    "Plan IGN" : tile_layer_3e1beea62c3d39ae1d0823ca92c55b0d,
-                    "Photographies a\u00e9riennes IGN" : tile_layer_980ef997a17e0df5badfd6c395047c53,
-                    "OpenStreetMap (monde)" : tile_layer_97b2cf553a321817589c3616e207f1ca,
+                    "Plan IGN" : tile_layer_9e0cdd6be7530653678661ea88130e78,
+                    "Photographies a\u00e9riennes IGN" : tile_layer_7d2a5055518b60ae6056bd230d4759cd,
+                    "OpenStreetMap (monde)" : tile_layer_30d38627175f06af0b62180cfab1a90a,
                 },
                 overlays :  {
-                    "Antennes" : fast_marker_cluster_fa99f6e2334fc474cec6a20fae660a4a,
+                    "Antennes" : fast_marker_cluster_3224af5e3417c52776dd96d07ee4b9a6,
                 },
             };
-            let layer_control_c4cf0a2b1a808ccb2748b04eb9aab109 = L.control.layers(
-                layer_control_c4cf0a2b1a808ccb2748b04eb9aab109_layers.base_layers,
-                layer_control_c4cf0a2b1a808ccb2748b04eb9aab109_layers.overlays,
+            let layer_control_fc951bb73080951f397c6c4524c3eaeb = L.control.layers(
+                layer_control_fc951bb73080951f397c6c4524c3eaeb_layers.base_layers,
+                layer_control_fc951bb73080951f397c6c4524c3eaeb_layers.overlays,
                 {
   "position": "topright",
   "collapsed": true,
   "autoZIndex": true,
 }
-            ).addTo(map_32f0851957fb68fd350fc5e389cf7853);
+            ).addTo(map_d641d3bb4bed170db1e1aac09f2eda68);
 
         
 </script>
