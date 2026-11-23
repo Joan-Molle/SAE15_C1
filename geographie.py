@@ -367,6 +367,7 @@ classement_echelles()
 
 
 
+
 # 9. GRAPHIQUE PAR DEPARTEMENT (3.2)
 
 # On copie les données
@@ -383,31 +384,29 @@ nombre_departements = nombre_departements[
 # On compte les installations par département
 nombre_departements = nombre_departements.groupby("DEPARTEMENT").size()
 
-# On crée un graphique plus grand
-plt.figure(figsize=(20, 9))
+# On crée un graphique très large
+plt.figure(figsize=(22, 9))
 
 # On affiche les barres avec plus d'espace
-plt.bar(nombre_departements.index, nombre_departements.values, width=0.6)
+plt.bar(nombre_departements.index, nombre_departements.values, width=0.5)
 
 # On ajoute les titres
+plt.title("Nombre d'installations par département", fontsize=17)
 plt.xlabel("Départements", fontsize=12)
 plt.ylabel("Nombre d'installations", fontsize=12)
-plt.title("Nombre d'installations par département", fontsize=16)
 
-# On espace les départements sur l'axe horizontal
-plt.xticks(rotation=45, fontsize=10)
+# On espace et incline les numéros des départements
+plt.xticks(rotation=60, fontsize=10)
 
-# On espace les graduations de l'axe vertical
+# On règle l'échelle verticale de 500 en 500
 maximum = nombre_departements.max()
-plt.yticks(range(0, maximum + 1, max(1, maximum // 10)))
+plt.yticks(range(0, maximum + 501, 500))
 
-# On ajoute une grille légère
-plt.grid(axis="y", alpha=0.3)
-
-# On place la grille derrière les barres
+# On ajoute une grille horizontale légère
+plt.grid(axis="y", linestyle="--", alpha=0.3)
 plt.gca().set_axisbelow(True)
 
-# On ajoute une légende explicative
+# On explique le code 98
 plt.figtext(
     0.5, 0.01,
     "98 : territoires dont le code INSEE commence par 98.",
@@ -415,8 +414,8 @@ plt.figtext(
     fontsize=10
 )
 
-# On ajuste les espaces
-plt.tight_layout(rect=[0, 0.04, 1, 1])
+# On laisse de l'espace autour du graphique
+plt.subplots_adjust(bottom=0.18, left=0.08, right=0.98, top=0.92)
 
 # On affiche le graphique
 plt.show()
