@@ -1,10 +1,9 @@
 
-
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 # 1. LIRE LE FICHIER
-
 
 df = pd.read_csv("sup_support.txt", sep=";", dtype=str)
 
@@ -15,9 +14,7 @@ print("\nLes colonnes :")
 print(df.columns.tolist())
 
 
-
 # 2. DESCRIPTION DES COLONNES
-
 
 descriptions = {
     "SUP_ID": "Identifiant du support",
@@ -46,8 +43,8 @@ print("\nDescription des colonnes :")
 for colonne in df.columns:
     print(colonne, ":", descriptions.get(colonne, "Non identifiée"))
 
-# 3. DICTIONNAIRE DES DEPARTEMENTS
 
+# 3. DICTIONNAIRE DES DEPARTEMENTS
 
 noms_departements = {
     "01": "Ain", "02": "Aisne", "03": "Allier",
@@ -105,7 +102,6 @@ noms_departements = {
 
 # 4. DICTIONNAIRE DES REGIONS
 
-
 regions_departements = {
     "Normandie": ["14", "27", "50", "61", "76"],
     "Île-de-France": ["75", "77", "78", "91", "92", "93", "94", "95"],
@@ -130,7 +126,6 @@ regions_departements = {
 
 # 5. EXTRAIRE LE DEPARTEMENT
 
-
 def extraire_departement(code):
 
     code = str(code).strip().upper()
@@ -144,9 +139,7 @@ def extraire_departement(code):
     return code[:2]
 
 
-
 # 6. FONCTION USED_DATA
-
 
 def used_data(zone):
 
@@ -191,9 +184,7 @@ def used_data(zone):
     return resultat, nombre
 
 
-
 # 7. CLASSEMENT PAR ECHELLE (3.1)
-
 
 def classement_echelles():
 
@@ -237,10 +228,9 @@ def classement_echelles():
     return nombre_france, nombre_regions, nombre_departements, nombre_communes
 
 
-
 # 8. TESTS DES FONCTIONS
 
-# Exemple : récupérer les installations de Normandie
+# Récupérer les installations de Normandie
 installations, nombre = used_data("Normandie")
 
 print("\nINSTALLATIONS EN NORMANDIE :")
@@ -251,3 +241,27 @@ print("Nombre total :", nombre)
 
 # Afficher le classement des échelles
 classement_echelles()
+
+
+# 9. GRAPHIQUE PAR DEPARTEMENT (3.2)
+
+# Récupérer le nombre d'installations par département
+nombre_departements = df.copy()
+
+nombre_departements["DEPARTEMENT"] = nombre_departements["COM_CD_INSEE"].apply(extraire_departement)
+
+nombre_departements = nombre_departements.groupby("DEPARTEMENT").size()
+
+# Créer le graphique
+plt.figure(figsize=(15, 6))
+
+plt.bar(nombre_departements.index, nombre_departements.values)
+
+plt.xlabel("Départements")
+plt.ylabel("Nombre d'installations")
+plt.title("Nombre d'installations par département")
+
+plt.xticks(rotation=90)
+
+plt.tight_layout()
+plt.show()
