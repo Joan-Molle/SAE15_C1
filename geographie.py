@@ -370,41 +370,47 @@ classement_echelles()
 
 # 9. GRAPHIQUE PAR DEPARTEMENT (3.2)
 
-
-# On copie le tableau de données
+# On copie les données
 nombre_departements = df.copy()
 
-# On récupère le département à partir du code INSEE
+# On récupère les départements
 nombre_departements["DEPARTEMENT"] = nombre_departements["COM_CD_INSEE"].apply(extraire_departement)
 
-# On supprime les lignes correspondant au code 97
+# On supprime le code 97
 nombre_departements = nombre_departements[
     nombre_departements["DEPARTEMENT"] != "97"
 ]
 
-# On compte le nombre d'installations par département
+# On compte les installations par département
 nombre_departements = nombre_departements.groupby("DEPARTEMENT").size()
 
-# On crée le graphique
-plt.figure(figsize=(15, 6))
+# On crée un graphique plus large
+plt.figure(figsize=(18, 7))
 
-# On affiche les barres
-plt.bar(nombre_departements.index, nombre_departements.values)
+# On affiche les barres avec un peu d'espace entre elles
+plt.bar(nombre_departements.index, nombre_departements.values, width=0.7)
 
 # On ajoute les titres
 plt.xlabel("Départements")
 plt.ylabel("Nombre d'installations")
-plt.title("Nombre d'installations par département")
+plt.title("Nombre d'installations par département", fontsize=16)
 
-# On ajoute une légende pour expliquer le code 98
-plt.plot([], [], " ", label="98 : Territoires d'outre-mer regroupés")
-plt.legend()
+# On espace les numéros des départements
+plt.xticks(rotation=45, fontsize=9)
 
-# On incline les numéros des départements
-plt.xticks(rotation=90)
+# On ajoute une grille légère pour faciliter la lecture
+plt.grid(axis="y", alpha=0.3)
 
-# On ajuste la présentation
-plt.tight_layout()
+# On explique le code 98
+plt.figtext(
+    0.5, 0.01,
+    "98 : territoires dont le code INSEE commence par 98.",
+    ha="center",
+    fontsize=10
+)
+
+# On ajuste les espaces
+plt.tight_layout(rect=[0, 0.04, 1, 1])
 
 # On affiche le graphique
 plt.show()
