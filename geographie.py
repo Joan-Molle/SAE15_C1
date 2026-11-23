@@ -366,46 +366,45 @@ classement_echelles()
 
 
 
+
+
 # 9. GRAPHIQUE PAR DEPARTEMENT (3.2)
 
 
-# On copie le tableau df pour travailler sur une copie.
-# Cela évite de modifier directement le tableau initial.
+# On copie le tableau de données
 nombre_departements = df.copy()
 
-# On ajoute une colonne DEPARTEMENT à cette copie.
-# On utilise le code INSEE pour retrouver le département.
+# On récupère le département à partir du code INSEE
 nombre_departements["DEPARTEMENT"] = nombre_departements["COM_CD_INSEE"].apply(extraire_departement)
 
-# On regroupe les installations par département.
-# size() compte le nombre d'installations dans chaque département.
+# On supprime les lignes correspondant au code 97
+nombre_departements = nombre_departements[
+    nombre_departements["DEPARTEMENT"] != "97"
+]
+
+# On compte le nombre d'installations par département
 nombre_departements = nombre_departements.groupby("DEPARTEMENT").size()
 
-# On crée une nouvelle fenêtre pour le graphique.
-# figsize=(15, 6) définit sa largeur et sa hauteur.
+# On crée le graphique
 plt.figure(figsize=(15, 6))
 
-# On crée un graphique en barres.
-# L'axe horizontal représente les départements.
-# L'axe vertical représente le nombre d'installations.
+# On affiche les barres
 plt.bar(nombre_departements.index, nombre_departements.values)
 
-# On ajoute le titre de l'axe horizontal.
+# On ajoute les titres
 plt.xlabel("Départements")
-
-# On ajoute le titre de l'axe vertical.
 plt.ylabel("Nombre d'installations")
-
-# On ajoute le titre général du graphique.
 plt.title("Nombre d'installations par département")
 
-# On incline les noms des départements à 90 degrés.
-# Cela permet de mieux les lire.
+# On ajoute une légende pour expliquer le code 98
+plt.plot([], [], " ", label="98 : Territoires d'outre-mer regroupés")
+plt.legend()
+
+# On incline les numéros des départements
 plt.xticks(rotation=90)
 
-# On ajuste automatiquement les espaces du graphique
-# pour éviter que les textes soient coupés.
+# On ajuste la présentation
 plt.tight_layout()
 
-# On affiche le graphique à l'écran.
+# On affiche le graphique
 plt.show()
