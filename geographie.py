@@ -1,21 +1,45 @@
 
+
+# On importe pandas pour lire, organiser et analyser les données.
+# On lui donne le raccourci "pd" pour écrire moins de code.
 import pandas as pd
+
+# On importe matplotlib.pyplot pour créer des graphiques.
+# On lui donne le raccourci "plt".
 import matplotlib.pyplot as plt
+
 
 
 # 1. LIRE LE FICHIER
 
+
+# On ouvre le fichier sup_support.txt avec pandas.
+# sep=";" indique que les informations sont séparées par des points-virgules.
+# dtype=str indique que toutes les données seront considérées comme du texte.
+# Le fichier est stocké dans une variable appelée df.
 df = pd.read_csv("sup_support.txt", sep=";", dtype=str)
 
+# On affiche un message pour présenter les premières lignes du fichier.
 print("Les 5 premières lignes :")
+
+# head() permet d'afficher les 5 premières lignes du tableau.
+# Cela permet de vérifier que le fichier a bien été lu.
 print(df.head())
 
+# On affiche les noms des différentes colonnes du fichier.
 print("\nLes colonnes :")
+
+# columns.tolist() récupère les noms des colonnes et les transforme en liste.
 print(df.columns.tolist())
+
 
 
 # 2. DESCRIPTION DES COLONNES
 
+
+# On crée un dictionnaire.
+# Un dictionnaire associe une information à une autre information.
+# Ici, chaque nom de colonne est associé à une description.
 descriptions = {
     "SUP_ID": "Identifiant du support",
     "STA_NM_ANFR": "Identifiant de l'installation ANFR",
@@ -38,14 +62,27 @@ descriptions = {
     "COM_CD_INSEE": "Code INSEE de la commune"
 }
 
+# On affiche un titre.
 print("\nDescription des colonnes :")
 
+# On parcourt toutes les colonnes du tableau df.
+# La variable colonne prend le nom de chaque colonne l'une après l'autre.
 for colonne in df.columns:
+
+    # On affiche le nom de la colonne et sa description.
+    # descriptions.get() recherche la description correspondante.
+    # Si la colonne n'existe pas dans le dictionnaire,
+    # le programme affiche "Non identifiée".
     print(colonne, ":", descriptions.get(colonne, "Non identifiée"))
+
 
 
 # 3. DICTIONNAIRE DES DEPARTEMENTS
 
+
+# On crée un dictionnaire qui associe chaque numéro de département
+# à son nom.
+# Par exemple : "76" correspond à "Seine-Maritime".
 noms_departements = {
     "01": "Ain", "02": "Aisne", "03": "Allier",
     "04": "Alpes-de-Haute-Provence", "05": "Hautes-Alpes",
@@ -100,8 +137,12 @@ noms_departements = {
 }
 
 
+
 # 4. DICTIONNAIRE DES REGIONS
 
+# On crée un deuxième dictionnaire.
+# Cette fois, chaque région est associée à une liste de départements.
+# Par exemple, la Normandie contient les départements 14, 27, 50, 61 et 76.
 regions_departements = {
     "Normandie": ["14", "27", "50", "61", "76"],
     "Île-de-France": ["75", "77", "78", "91", "92", "93", "94", "95"],
@@ -124,144 +165,247 @@ regions_departements = {
 }
 
 
+
 # 5. EXTRAIRE LE DEPARTEMENT
 
+
+# On crée une fonction appelée extraire_departement.
+# Elle reçoit un code INSEE en paramètre.
 def extraire_departement(code):
 
+    # str() transforme le code en texte.
+    # strip() enlève les espaces inutiles au début et à la fin.
+    # upper() transforme les lettres en majuscules.
     code = str(code).strip().upper()
 
+    # Si le code commence par 2A ou 2B,
+    # on récupère les deux premiers caractères.
+    # Cela permet de reconnaître les départements corses.
     if code.startswith("2A") or code.startswith("2B"):
         return code[:2]
 
+    # Si le code commence par 971, 972, 973, 974 ou 976,
+    # on récupère les trois premiers caractères.
+    # Cela permet de reconnaître les départements d'outre-mer.
     if code.startswith(("971", "972", "973", "974", "976")):
         return code[:3]
 
+    # Pour les autres départements,
+    # on récupère uniquement les deux premiers caractères.
     return code[:2]
+
 
 
 # 6. FONCTION USED_DATA
 
+
+# Cette fonction permet de rechercher les installations
+# selon une zone géographique choisie.
+# La zone peut être la France, Paris, une région ou un département.
 def used_data(zone):
 
-    # Lire le fichier
+    # On lit le fichier de données.
     df = pd.read_csv("sup_support.txt", sep=";", dtype=str)
 
-    # Trouver le département
+    # On crée une nouvelle colonne appelée DEPARTEMENT.
+    # Pour chaque commune, on utilise la fonction précédente
+    # pour retrouver son numéro de département à partir du code INSEE.
     df["DEPARTEMENT"] = df["COM_CD_INSEE"].apply(extraire_departement)
 
-    # Rechercher la zone
+    # On nettoie le nom de la zone recherchée.
+    # strip() enlève les espaces.
+    # casefold() permet de comparer les textes sans tenir compte
+    # des différences entre majuscules et minuscules.
     zone = zone.strip().casefold()
 
+    # Si l'utilisateur demande toute la France,
+    # on conserve toutes les installations.
     if zone == "france":
         resultat = df
 
+    # Si l'utilisateur demande Paris,
+    # on conserve uniquement les installations du département 75.
     elif zone == "paris":
         resultat = df[df["DEPARTEMENT"] == "75"]
 
+    # Dans les autres cas, on recherche une région ou un département.
     else:
+
+        # On crée un tableau vide pour commencer.
         resultat = df.iloc[0:0]
 
-        # Chercher une région
+        # On parcourt toutes les régions du dictionnaire.
         for region in regions_departements:
 
+            # On compare le nom de la région demandée
+            # avec les noms présents dans le dictionnaire.
             if region.casefold() == zone:
+
+                # isin() vérifie si le département de chaque ligne
+                # appartient à la liste des départements de cette région.
+                # On conserve uniquement les installations correspondantes.
                 resultat = df[
                     df["DEPARTEMENT"].isin(regions_departements[region])
                 ]
 
-        # Chercher un département
+        # On parcourt ensuite tous les numéros de départements.
         for numero in noms_departements:
 
+            # On vérifie si la zone demandée correspond
+            # soit au numéro du département, soit à son nom.
             if numero.casefold() == zone or noms_departements[numero].casefold() == zone:
+
+                # On conserve uniquement les installations
+                # appartenant au département recherché.
                 resultat = df[df["DEPARTEMENT"] == numero]
 
+    # Si le résultat ne contient aucune ligne,
+    # cela signifie qu'aucune installation n'a été trouvée.
     if resultat.empty:
         print("Aucune installation trouvée pour cette zone.")
 
-    # Calculer le nombre d'installations
+    # len() compte le nombre de lignes du tableau.
+    # Chaque ligne représente une installation.
     nombre = len(resultat)
 
+    # return renvoie deux résultats :
+    # le tableau des installations et leur nombre total.
     return resultat, nombre
+
 
 
 # 7. CLASSEMENT PAR ECHELLE (3.1)
 
+
+# Cette fonction permet de compter les installations
+# à différentes échelles géographiques :
+# France, région, département et commune.
 def classement_echelles():
 
-    # Lire les données
+    # On relit le fichier de données.
     df = pd.read_csv("sup_support.txt", sep=";", dtype=str)
 
-    # Trouver les départements
+    # On ajoute une colonne DEPARTEMENT.
+    # Chaque code INSEE est utilisé pour retrouver le département.
     df["DEPARTEMENT"] = df["COM_CD_INSEE"].apply(extraire_departement)
 
-    # Ajouter les régions
+    # On ajoute une nouvelle colonne REGION.
+    # Au départ, toutes les cases sont vides.
     df["REGION"] = ""
 
+    # On parcourt chaque région du dictionnaire.
     for region in regions_departements:
 
+        # Pour chaque région, on parcourt ses départements.
         for departement in regions_departements[region]:
 
+            # loc permet de modifier certaines lignes du tableau.
+            # On recherche les lignes dont le département correspond.
+            # On leur attribue le nom de la région correspondante.
             df.loc[df["DEPARTEMENT"] == departement, "REGION"] = region
 
-    # Compter les installations
+    # len(df) compte toutes les lignes du tableau.
+    # On obtient donc le nombre total d'installations en France.
     nombre_france = len(df)
 
+    # groupby("REGION") regroupe les installations par région.
+    # size() compte le nombre de lignes dans chaque groupe.
     nombre_regions = df.groupby("REGION").size()
 
+    # On regroupe maintenant les installations par département.
+    # size() compte le nombre d'installations dans chaque département.
     nombre_departements = df.groupby("DEPARTEMENT").size()
 
+    # On regroupe les installations par commune.
+    # Le code INSEE permet d'identifier chaque commune.
     nombre_communes = df.groupby("COM_CD_INSEE").size()
 
-    # Afficher les résultats
+    # On affiche le nombre total d'installations en France.
     print("\nNOMBRE D'INSTALLATIONS EN FRANCE :")
     print(nombre_france)
 
+    # On affiche le nombre d'installations pour chaque région.
     print("\nNOMBRE D'INSTALLATIONS PAR REGION :")
     print(nombre_regions)
 
+    # On affiche le nombre d'installations pour chaque département.
     print("\nNOMBRE D'INSTALLATIONS PAR DEPARTEMENT :")
     print(nombre_departements)
 
+    # On affiche le nombre d'installations pour chaque commune.
     print("\nNOMBRE D'INSTALLATIONS PAR COMMUNE :")
     print(nombre_communes)
 
+    # On renvoie les quatre résultats obtenus.
     return nombre_france, nombre_regions, nombre_departements, nombre_communes
+
 
 
 # 8. TESTS DES FONCTIONS
 
-# Récupérer les installations de Normandie
+
+# On appelle la fonction used_data en lui donnant "Normandie".
+# La fonction va rechercher toutes les installations de cette région.
+# Les deux résultats sont enregistrés dans deux variables :
+# installations contient le tableau des installations.
+# nombre contient le nombre total d'installations.
 installations, nombre = used_data("Normandie")
 
+# On affiche un titre pour présenter les résultats.
 print("\nINSTALLATIONS EN NORMANDIE :")
+
+# head() affiche uniquement les cinq premières installations.
 print(installations.head())
 
+# On affiche le nombre total d'installations trouvées.
 print("Nombre total :", nombre)
 
-
-# Afficher le classement des échelles
+# On appelle la fonction classement_echelles().
+# Elle affiche les nombres d'installations à chaque échelle géographique.
 classement_echelles()
+
 
 
 # 9. GRAPHIQUE PAR DEPARTEMENT (3.2)
 
-# Récupérer le nombre d'installations par département
+
+# On copie le tableau df pour travailler sur une copie.
+# Cela évite de modifier directement le tableau initial.
 nombre_departements = df.copy()
 
+# On ajoute une colonne DEPARTEMENT à cette copie.
+# On utilise le code INSEE pour retrouver le département.
 nombre_departements["DEPARTEMENT"] = nombre_departements["COM_CD_INSEE"].apply(extraire_departement)
 
+# On regroupe les installations par département.
+# size() compte le nombre d'installations dans chaque département.
 nombre_departements = nombre_departements.groupby("DEPARTEMENT").size()
 
-# Créer le graphique
+# On crée une nouvelle fenêtre pour le graphique.
+# figsize=(15, 6) définit sa largeur et sa hauteur.
 plt.figure(figsize=(15, 6))
 
+# On crée un graphique en barres.
+# L'axe horizontal représente les départements.
+# L'axe vertical représente le nombre d'installations.
 plt.bar(nombre_departements.index, nombre_departements.values)
 
+# On ajoute le titre de l'axe horizontal.
 plt.xlabel("Départements")
+
+# On ajoute le titre de l'axe vertical.
 plt.ylabel("Nombre d'installations")
+
+# On ajoute le titre général du graphique.
 plt.title("Nombre d'installations par département")
 
+# On incline les noms des départements à 90 degrés.
+# Cela permet de mieux les lire.
 plt.xticks(rotation=90)
 
+# On ajuste automatiquement les espaces du graphique
+# pour éviter que les textes soient coupés.
 plt.tight_layout()
+
+# On affiche le graphique à l'écran.
 plt.show()
