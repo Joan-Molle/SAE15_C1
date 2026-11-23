@@ -3,7 +3,7 @@
 # On importe pandas pour lire, organiser et analyser les données.
 # On lui donne le raccourci "pd" pour écrire moins de code.
 import pandas as pd
-
+from used_data import charger_supports
 # On importe matplotlib.pyplot pour créer des graphiques.
 # On lui donne le raccourci "plt".
 import matplotlib.pyplot as plt
@@ -14,11 +14,8 @@ import matplotlib.pyplot as plt
 
 
 # On ouvre le fichier sup_support.txt avec pandas.
-# sep=";" indique que les informations sont séparées par des points-virgules.
-# dtype=str indique que toutes les données seront considérées comme du texte.
 # Le fichier est stocké dans une variable appelée df.
-df = pd.read_csv("sup_support.txt", sep=";", dtype=str)
-
+df =charger_supports()
 # On affiche un message pour présenter les premières lignes du fichier.
 print("Les 5 premières lignes :")
 
