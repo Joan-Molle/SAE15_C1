@@ -1,11 +1,11 @@
 import pandas as pd
 
 
-IDENTIFIANTS = {"STA_NM_ANFR": str, "SUP_ID": str, "AER_ID": str, "EMR_ID": str,"ADM_ID": str, "NAT_ID": str, "TPO_ID": str, "TAE_ID": str,"ADR_NM_CP": str, "COM_CD_INSEE": str, "DEM_NM_COMSIS": str, "STA_NM_USER": str,}
+identifiants = {"STA_NM_ANFR": str, "SUP_ID": str, "AER_ID": str, "EMR_ID": str,"ADM_ID": str, "NAT_ID": str, "TPO_ID": str, "TAE_ID": str,"ADR_NM_CP": str, "COM_CD_INSEE": str, "DEM_NM_COMSIS": str, "STA_NM_USER": str,}
 
 
 def lire(chemin):
-    return pd.read_csv(chemin, sep=";", decimal=",", dtype=IDENTIFIANTS, encoding="utf-8")
+    return pd.read_csv(chemin, sep=";", decimal=",", dtype=identifiants, encoding="utf-8")
 
 
 
