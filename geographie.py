@@ -1,8 +1,3 @@
-
-
-# On importe pandas pour lire, organiser et analyser les données.
-# On lui donne le raccourci "pd" pour écrire moins de code.
-import pandas as pd
 from used_data import charger_supports
 # On importe matplotlib.pyplot pour créer des graphiques.
 # On lui donne le raccourci "plt".
@@ -201,9 +196,7 @@ def extraire_departement(code):
 # La zone peut être la France, Paris, une région ou un département.
 def used_data(zone):
 
-    # On lit le fichier de données.
-    df = pd.read_csv("sup_support.txt", sep=";", dtype=str)
-
+    df= charger_supports()
     # On crée une nouvelle colonne appelée DEPARTEMENT.
     # Pour chaque commune, on utilise la fonction précédente
     # pour retrouver son numéro de département à partir du code INSEE.
@@ -279,9 +272,7 @@ def used_data(zone):
 # France, région, département et commune.
 def classement_echelles():
 
-    # On relit le fichier de données.
-    df = pd.read_csv("sup_support.txt", sep=";", dtype=str)
-
+    df = charger_supports()
     # On ajoute une colonne DEPARTEMENT.
     # Chaque code INSEE est utilisé pour retrouver le département.
     df["DEPARTEMENT"] = df["COM_CD_INSEE"].apply(extraire_departement)

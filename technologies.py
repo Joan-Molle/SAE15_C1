@@ -1,16 +1,10 @@
-
-import pandas as pd
 import matplotlib.pyplot as plt
-
+from used_data import charger_emetteurs
 # ==================================
 # 1. Lire le fichier des emetteurs
 # ==================================
 
-emetteurs = pd.read_csv(
-    "data/sup_emetteur.txt",
-    sep=";",
-    encoding="utf-8"
-)
+emetteurs = charger_emetteurs()
 
 
 # ==================================
@@ -128,7 +122,7 @@ def rechercher_emetteur(id_emetteur):
 
 
 # Exemple de recherche
-rechercher_emetteur(850)
+rechercher_emetteur("850")
 
 
 
@@ -139,8 +133,4 @@ while True:
         print("Fin de la recherche.")
         break
 
-    try:
-        rechercher_emetteur(int(id_recherche))
-    except ValueError:
-        print("Veuillez entrer un ID valide.")
-        1
+    rechercher_emetteur(id_recherche)
