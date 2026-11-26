@@ -1,3 +1,5 @@
+#3.1 et 3.2
+
 from used_data import charger_supports
 # On importe matplotlib.pyplot pour créer des graphiques.
 # On lui donne le raccourci "plt".
