@@ -47,5 +47,6 @@ SAE15_C1/
     technologies.py
     evolution_technologies.py
 ```
+- installer les modules : folium, tkinter, matplotlib et HTML avant de lancer le code python.
 
 groupe : Mombembo Glory Ethan, Karimi Khalil, Ismaël Sow, Sevgi Dinner, Joan Molle
