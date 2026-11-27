@@ -1,0 +1,694 @@
+#3.1 et 3.2
+
+from used_data import charger_supports
+# On importe matplotlib.pyplot pour créer des graphiques.
+# On lui donne le raccourci "plt".
+import matplotlib.pyplot as plt
+
+
+
+# 1. LIRE LE FICHIER
+
+
+# On ouvre le fichier sup_support.txt avec pandas.
+# Le fichier est stocké dans une variable appelée df.
+df =charger_supports()
+# On affiche un message pour présenter les premières lignes du fichier.
+print("Les 5 premières lignes :")
+
+# head() permet d'afficher les 5 premières lignes du tableau.
+# Cela permet de vérifier que le fichier a bien été lu.
+print(df.head())
+
+# On affiche les noms des différentes colonnes du fichier.
+print("\nLes colonnes :")
+
+# columns.tolist() récupère les noms des colonnes et les transforme en liste.
+print(df.columns.tolist())
+
+
+
+# 2. DESCRIPTION DES COLONNES
+
+
+# On crée un dictionnaire.
+# Un dictionnaire associe une information à une autre information.
+# Ici, chaque nom de colonne est associé à une description.
+descriptions = {
+    "SUP_ID": "Identifiant du support",
+    "STA_NM_ANFR": "Identifiant de l'installation ANFR",
+    "NAT_ID": "Nature du support",
+    "COR_NB_DG_LAT": "Latitude : degrés",
+    "COR_NB_MN_LAT": "Latitude : minutes",
+    "COR_NB_SC_LAT": "Latitude : secondes",
+    "COR_CD_NS_LAT": "Latitude : Nord ou Sud",
+    "COR_NB_DG_LON": "Longitude : degrés",
+    "COR_NB_MN_LON": "Longitude : minutes",
+    "COR_NB_SC_LON": "Longitude : secondes",
+    "COR_CD_EW_LON": "Longitude : Est ou Ouest",
+    "SUP_NM_HAUT": "Hauteur du support",
+    "TPO_ID": "Identifiant du propriétaire",
+    "ADR_LB_LIEU": "Lieu d'implantation",
+    "ADR_LB_ADD1": "Adresse complémentaire 1",
+    "ADR_LB_ADD2": "Adresse complémentaire 2",
+    "ADR_LB_ADD3": "Adresse complémentaire 3",
+    "ADR_NM_CP": "Code postal",
+    "COM_CD_INSEE": "Code INSEE de la commune"
+}
+
+# On affiche un titre.
+print("\nDescription des colonnes :")
+
+# On parcourt toutes les colonnes du tableau df.
+# La variable colonne prend le nom de chaque colonne l'une après l'autre.
+for colonne in df.columns:
+
+    # On affiche le nom de la colonne et sa description.
+    # descriptions.get() recherche la description correspondante.
+    # Si la colonne n'existe pas dans le dictionnaire,
+    # le programme affiche "Non identifiée".
+    print(colonne, ":", descriptions.get(colonne, "Non identifiée"))
+
+
+
+# 3. DICTIONNAIRE DES DEPARTEMENTS
+
+
+# On crée un dictionnaire qui associe chaque numéro de département
+# à son nom.
+# Par exemple : "76" correspond à "Seine-Maritime".
+noms_departements = {
+    "01": "Ain", "02": "Aisne", "03": "Allier",
+    "04": "Alpes-de-Haute-Provence", "05": "Hautes-Alpes",
+    "06": "Alpes-Maritimes", "07": "Ardèche",
+    "08": "Ardennes", "09": "Ariège", "10": "Aube",
+    "11": "Aude", "12": "Aveyron",
+    "13": "Bouches-du-Rhône", "14": "Calvados",
+    "15": "Cantal", "16": "Charente",
+    "17": "Charente-Maritime", "18": "Cher",
+    "19": "Corrèze", "2A": "Corse-du-Sud",
+    "2B": "Haute-Corse", "21": "Côte-d'Or",
+    "22": "Côtes-d'Armor", "23": "Creuse",
+    "24": "Dordogne", "25": "Doubs", "26": "Drôme",
+    "27": "Eure", "28": "Eure-et-Loir",
+    "29": "Finistère", "30": "Gard",
+    "31": "Haute-Garonne", "32": "Gers",
+    "33": "Gironde", "34": "Hérault",
+    "35": "Ille-et-Vilaine", "36": "Indre",
+    "37": "Indre-et-Loire", "38": "Isère",
+    "39": "Jura", "40": "Landes",
+    "41": "Loir-et-Cher", "42": "Loire",
+    "43": "Haute-Loire", "44": "Loire-Atlantique",
+    "45": "Loiret", "46": "Lot",
+    "47": "Lot-et-Garonne", "48": "Lozère",
+    "49": "Maine-et-Loire", "50": "Manche",
+    "51": "Marne", "52": "Haute-Marne",
+    "53": "Mayenne", "54": "Meurthe-et-Moselle",
+    "55": "Meuse", "56": "Morbihan",
+    "57": "Moselle", "58": "Nièvre",
+    "59": "Nord", "60": "Oise", "61": "Orne",
+    "62": "Pas-de-Calais", "63": "Puy-de-Dôme",
+    "64": "Pyrénées-Atlantiques", "65": "Hautes-Pyrénées",
+    "66": "Pyrénées-Orientales", "67": "Bas-Rhin",
+    "68": "Haut-Rhin", "69": "Rhône",
+    "70": "Haute-Saône", "71": "Saône-et-Loire",
+    "72": "Sarthe", "73": "Savoie",
+    "74": "Haute-Savoie", "75": "Paris",
+    "76": "Seine-Maritime", "77": "Seine-et-Marne",
+    "78": "Yvelines", "79": "Deux-Sèvres",
+    "80": "Somme", "81": "Tarn",
+    "82": "Tarn-et-Garonne", "83": "Var",
+    "84": "Vaucluse", "85": "Vendée",
+    "86": "Vienne", "87": "Haute-Vienne",
+    "88": "Vosges", "89": "Yonne",
+    "90": "Territoire de Belfort",
+    "91": "Essonne", "92": "Hauts-de-Seine",
+    "93": "Seine-Saint-Denis", "94": "Val-de-Marne",
+    "95": "Val-d'Oise",
+    "971": "Guadeloupe", "972": "Martinique",
+    "973": "Guyane", "974": "La Réunion",
+    "976": "Mayotte"
+}
+
+
+
+# 4. DICTIONNAIRE DES REGIONS
+
+# On crée un deuxième dictionnaire.
+# Cette fois, chaque région est associée à une liste de départements.
+# Par exemple, la Normandie contient les départements 14, 27, 50, 61 et 76.
+regions_departements = {
+    "Normandie": ["14", "27", "50", "61", "76"],
+    "Île-de-France": ["75", "77", "78", "91", "92", "93", "94", "95"],
+    "Bretagne": ["22", "29", "35", "56"],
+    "Hauts-de-France": ["02", "59", "60", "62", "80"],
+    "Grand Est": ["08", "10", "51", "52", "54", "55", "57", "67", "68", "88"],
+    "Pays de la Loire": ["44", "49", "53", "72", "85"],
+    "Centre-Val de Loire": ["18", "28", "36", "37", "41", "45"],
+    "Bourgogne-Franche-Comté": ["21", "25", "39", "58", "70", "71", "89", "90"],
+    "Nouvelle-Aquitaine": ["16", "17", "19", "23", "24", "33", "40", "47", "64", "79", "86", "87"],
+    "Occitanie": ["09", "11", "12", "30", "31", "32", "34", "46", "48", "65", "66", "81", "82"],
+    "Auvergne-Rhône-Alpes": ["01", "03", "07", "15", "26", "38", "42", "43", "63", "69", "73", "74"],
+    "Provence-Alpes-Côte d'Azur": ["04", "05", "06", "13", "83", "84"],
+    "Corse": ["2A", "2B"],
+    "Guadeloupe": ["971"],
+    "Martinique": ["972"],
+    "Guyane": ["973"],
+    "La Réunion": ["974"],
+    "Mayotte": ["976"]
+}
+
+
+
+# 5. EXTRAIRE LE DEPARTEMENT
+
+
+# On crée une fonction appelée extraire_departement.
+# Elle reçoit un code INSEE en paramètre.
+def extraire_departement(code):
+
+    # str() transforme le code en texte.
+    # strip() enlève les espaces inutiles au début et à la fin.
+    # upper() transforme les lettres en majuscules.
+    code = str(code).strip().upper()
+
+    # Si le code commence par 2A ou 2B,
+    # on récupère les deux premiers caractères.
+    # Cela permet de reconnaître les départements corses.
+    if code.startswith("2A") or code.startswith("2B"):
+        return code[:2]
+
+    # Si le code commence par 971, 972, 973, 974 ou 976,
+    # on récupère les trois premiers caractères.
+    # Cela permet de reconnaître les départements d'outre-mer.
+    if code.startswith(("971", "972", "973", "974", "976")):
+        return code[:3]
+
+    # Pour les autres départements,
+    # on récupère uniquement les deux premiers caractères.
+    return code[:2]
+
+
+
+# 6. FONCTION USED_DATA
+
+
+# Cette fonction permet de rechercher les installations
+# selon une zone géographique choisie.
+# La zone peut être la France, Paris, une région ou un département.
+def used_data(zone):
+
+    df= charger_supports()
+    # On crée une nouvelle colonne appelée DEPARTEMENT.
+    # Pour chaque commune, on utilise la fonction précédente
+    # pour retrouver son numéro de département à partir du code INSEE.
+    df["DEPARTEMENT"] = df["COM_CD_INSEE"].apply(extraire_departement)
+
+    # On nettoie le nom de la zone recherchée.
+    # strip() enlève les espaces.
+    # casefold() permet de comparer les textes sans tenir compte
+    # des différences entre majuscules et minuscules.
+    zone = zone.strip().casefold()
+
+    # Si l'utilisateur demande toute la France,
+    # on conserve toutes les installations.
+    if zone == "france":
+        resultat = df
+
+    # Si l'utilisateur demande Paris,
+    # on conserve uniquement les installations du département 75.
+    elif zone == "paris":
+        resultat = df[df["DEPARTEMENT"] == "75"]
+
+    # Dans les autres cas, on recherche une région ou un département.
+    else:
+
+        # On crée un tableau vide pour commencer.
+        resultat = df.iloc[0:0]
+
+        # On parcourt toutes les régions du dictionnaire.
+        for region in regions_departements:
+
+            # On compare le nom de la région demandée
+            # avec les noms présents dans le dictionnaire.
+            if region.casefold() == zone:
+
+                # isin() vérifie si le département de chaque ligne
+                # appartient à la liste des départements de cette région.
+                # On conserve uniquement les installations correspondantes.
+                resultat = df[
+                    df["DEPARTEMENT"].isin(regions_departements[region])
+                ]
+
+        # On parcourt ensuite tous les numéros de départements.
+        for numero in noms_departements:
+
+            # On vérifie si la zone demandée correspond
+            # soit au numéro du département, soit à son nom.
+            if numero.casefold() == zone or noms_departements[numero].casefold() == zone:
+
+                # On conserve uniquement les installations
+                # appartenant au département recherché.
+                resultat = df[df["DEPARTEMENT"] == numero]
+
+    # Si le résultat ne contient aucune ligne,
+    # cela signifie qu'aucune installation n'a été trouvée.
+    if resultat.empty:
+        print("Aucune installation trouvée pour cette zone.")
+
+    # len() compte le nombre de lignes du tableau.
+    # Chaque ligne représente une installation.
+    nombre = len(resultat)
+
+    # return renvoie deux résultats :
+    # le tableau des installations et leur nombre total.
+    return resultat, nombre
+
+
+
+# 7. CLASSEMENT PAR ECHELLE (3.1)
+
+
+# Cette fonction permet de compter les installations
+# à différentes échelles géographiques :
+# France, région, département et commune.
+def classement_echelles():
+
+    df = charger_supports()
+    # On ajoute une colonne DEPARTEMENT.
+    # Chaque code INSEE est utilisé pour retrouver le département.
+    df["DEPARTEMENT"] = df["COM_CD_INSEE"].apply(extraire_departement)
+
+    # On ajoute une nouvelle colonne REGION.
+    # Au départ, toutes les cases sont vides.
+    df["REGION"] = ""
+
+    # On parcourt chaque région du dictionnaire.
+    for region in regions_departements:
+
+        # Pour chaque région, on parcourt ses départements.
+        for departement in regions_departements[region]:
+
+            # loc permet de modifier certaines lignes du tableau.
+            # On recherche les lignes dont le département correspond.
+            # On leur attribue le nom de la région correspondante.
+            df.loc[df["DEPARTEMENT"] == departement, "REGION"] = region
+
+    # len(df) compte toutes les lignes du tableau.
+    # On obtient donc le nombre total d'installations en France.
+    nombre_france = len(df)
+
+    # groupby("REGION") regroupe les installations par région.
+    # size() compte le nombre de lignes dans chaque groupe.
+    nombre_regions = df.groupby("REGION").size()
+
+    # On regroupe maintenant les installations par département.
+    # size() compte le nombre d'installations dans chaque département.
+    nombre_departements = df.groupby("DEPARTEMENT").size()
+
+    # On regroupe les installations par commune.
+    # Le code INSEE permet d'identifier chaque commune.
+    nombre_communes = df.groupby("COM_CD_INSEE").size()
+
+    # On affiche le nombre total d'installations en France.
+    print("\nNOMBRE D'INSTALLATIONS EN FRANCE :")
+    print(nombre_france)
+
+    # On affiche le nombre d'installations pour chaque région.
+    print("\nNOMBRE D'INSTALLATIONS PAR REGION :")
+    print(nombre_regions)
+
+    # On affiche le nombre d'installations pour chaque département.
+    print("\nNOMBRE D'INSTALLATIONS PAR DEPARTEMENT :")
+    print(nombre_departements)
+
+    # On affiche le nombre d'installations pour chaque commune.
+    print("\nNOMBRE D'INSTALLATIONS PAR COMMUNE :")
+    print(nombre_communes)
+
+    # On renvoie les quatre résultats obtenus.
+    return nombre_france, nombre_regions, nombre_departements, nombre_communes
+
+
+
+# 8. TESTS DES FONCTIONS
+
+
+# On appelle la fonction used_data en lui donnant "Normandie".
+# La fonction va rechercher toutes les installations de cette région.
+# Les deux résultats sont enregistrés dans deux variables :
+# installations contient le tableau des installations.
+# nombre contient le nombre total d'installations.
+installations, nombre = used_data("Normandie")
+
+# On affiche un titre pour présenter les résultats.
+print("\nINSTALLATIONS EN NORMANDIE :")
+
+# head() affiche uniquement les cinq premières installations.
+print(installations.head())
+
+# On affiche le nombre total d'installations trouvées.
+print("Nombre total :", nombre)
+
+# On appelle la fonction classement_echelles().
+# Elle affiche les nombres d'installations à chaque échelle géographique.
+classement_echelles()
+
+
+
+
+
+# 9. GRAPHIQUE PAR DEPARTEMENT (3.2)
+
+
+# OBJECTIF :
+# Cette partie permet de représenter graphiquement le nombre
+# d'installations radioélectriques présentes dans chaque département.
+#
+# Chaque barre représente un département.
+# La hauteur de la barre représente le nombre d'installations.
+#
+# Ce graphique permet de comparer facilement les départements
+# et de voir lesquels possèdent le plus d'installations.
+
+
+
+# COPIER LES DONNEES
+
+
+# On crée une copie du tableau df.
+# df contient les données qui ont été lues dans le fichier
+# sup_support.txt au début du programme.
+#
+# copy() permet de créer un nouveau tableau indépendant.
+# Cela évite de modifier directement le tableau de départ.
+#
+# Le nouveau tableau est enregistré dans la variable
+# nombre_departements.
+nombre_departements = df.copy()
+
+
+
+# RECUPERER LES DEPARTEMENTS
+
+
+# On ajoute une nouvelle colonne appelée DEPARTEMENT.
+#
+# COM_CD_INSEE est une colonne qui contient les codes INSEE
+# des communes où se trouvent les installations.
+#
+# apply() permet d'appliquer une fonction à chaque valeur
+# de cette colonne.
+#
+# Ici, on applique la fonction extraire_departement().
+# Cette fonction récupère le numéro du département à partir
+# du code INSEE de chaque commune.
+#
+# Exemple :
+# 76540 devient 76 (Seine-Maritime).
+# 27100 devient 27 (Eure).
+# 97101 devient 971 (Guadeloupe).
+#
+# Les résultats sont enregistrés dans la nouvelle colonne
+# DEPARTEMENT.
+nombre_departements["DEPARTEMENT"] = nombre_departements["COM_CD_INSEE"].apply(extraire_departement)
+
+
+
+#  SUPPRIMER LE CODE 97
+
+
+# On filtre le tableau pour supprimer les lignes
+# dont le département est exactement égal à "97".
+#
+# Le symbole != signifie "différent de".
+#
+# Cela signifie que l'on conserve uniquement les lignes
+# pour lesquelles le département est différent de 97.
+#
+# Les codes 971, 972, 973, 974 et 976 sont conservés,
+# car ils sont différents du code exact "97".
+#
+# Cette opération permet de ne pas afficher une barre
+# supplémentaire correspondant au code 97.
+nombre_departements = nombre_departements[
+    nombre_departements["DEPARTEMENT"] != "97"
+]
+
+
+
+# COMPTER LES INSTALLATIONS PAR DEPARTEMENT
+
+
+# On utilise groupby() pour regrouper les installations
+# qui appartiennent au même département.
+#
+# Par exemple, toutes les installations du département 76
+# sont regroupées ensemble.
+#
+# size() permet ensuite de compter le nombre de lignes
+# dans chaque groupe.
+#
+# Chaque ligne représentant une installation,
+# on obtient donc le nombre d'installations par département.
+#
+# Le résultat remplace le tableau précédent et est conservé
+# dans la variable nombre_departements.
+nombre_departements = nombre_departements.groupby("DEPARTEMENT").size()
+
+
+
+# CREER UN GRAPHIQUE PLUS LARGE
+
+
+# plt.figure() permet de créer une nouvelle fenêtre graphique.
+#
+# figsize permet de définir les dimensions du graphique.
+#
+# Le premier nombre (24) correspond à la largeur.
+# Le deuxième nombre (8) correspond à la hauteur.
+#
+# Une largeur importante permet de mieux espacer
+# les différents départements sur l'axe horizontal.
+#
+# Cela rend les numéros plus faciles à lire.
+plt.figure(figsize=(24, 8))
+
+
+
+# CREER UN EMPLACEMENT POUR CHAQUE DEPARTEMENT
+
+
+# On crée une suite de positions numériques.
+#
+# len(nombre_departements) permet de connaître le nombre
+# total de départements présents dans notre tableau.
+#
+# range() crée une suite de nombres qui commence à 0
+# et se termine juste avant le nombre total de départements.
+#
+# Par exemple, si on a 5 départements :
+# les positions seront 0, 1, 2, 3 et 4.
+#
+# Chaque département aura donc son propre emplacement
+# sur l'axe horizontal du graphique.
+#
+# Ces positions sont enregistrées dans la variable positions.
+positions = range(len(nombre_departements))
+
+
+
+# AFFICHER LES BARRES DU GRAPHIQUE
+
+
+# plt.bar() permet de créer un graphique en barres verticales.
+#
+# Le premier paramètre (positions) indique l'emplacement
+# de chaque barre sur l'axe horizontal.
+#
+# Le deuxième paramètre (nombre_departements.values)
+# correspond au nombre d'installations de chaque département.
+#
+# width=0.45 définit la largeur de chaque barre.
+#
+# Une largeur de 0.45 permet de laisser un espace
+# entre les barres pour éviter qu'elles soient trop serrées.
+#
+# La hauteur de chaque barre dépend du nombre d'installations.
+plt.bar(positions, nombre_departements.values, width=0.45)
+
+
+
+#  AJOUTER UNE LEGENDE POUR LE CODE 98
+
+
+# On ajoute une légende pour expliquer la signification
+# du code 98 présent sur l'axe horizontal.
+#
+# plt.plot([], [], " ") crée un élément vide.
+# Il ne dessine aucune ligne ni aucun point sur le graphique.
+#
+# label permet de donner un texte à cet élément.
+# Ce texte sera utilisé dans la légende.
+#
+# plt.legend() affiche ensuite la légende sur le graphique.
+#
+# Ici, on précise que le code 98 regroupe les territoires
+# dont le code INSEE commence par 98.
+plt.plot([], [], " ", label="98 : Territoires d'outre-mer regroupés")
+plt.legend()
+
+
+
+#  AFFICHER LES NUMEROS DES DEPARTEMENTS
+
+
+# plt.xticks() permet de personnaliser les graduations
+# et les étiquettes de l'axe horizontal.
+#
+# positions indique où placer les numéros.
+#
+# nombre_departements.index contient les codes
+# des départements à afficher.
+#
+# rotation=60 incline les numéros de 60 degrés.
+# Cela permet de mieux distinguer les numéros.
+#
+# fontsize=9 définit la taille de l'écriture.
+# Une petite taille permet d'afficher tous les départements
+# sans trop encombrer le graphique.
+plt.xticks(positions, nombre_departements.index, rotation=60, fontsize=9)
+
+
+
+# AJOUTER LES TITRES DU GRAPHIQUE
+
+
+# plt.title() ajoute le titre principal du graphique.
+# Il permet de comprendre immédiatement ce que représente
+# le graphique.
+# fontsize=16 définit la taille du titre.
+plt.title("Nombre d'installations par département", fontsize=16)
+
+# plt.xlabel() donne un nom à l'axe horizontal.
+# Ici, l'axe horizontal représente les départements.
+plt.xlabel("Départements", fontsize=12)
+
+# plt.ylabel() donne un nom à l'axe vertical.
+# Ici, l'axe vertical représente le nombre d'installations.
+plt.ylabel("Nombre d'installations", fontsize=12)
+
+
+
+# REGLER L'ECHELLE VERTICALE
+
+
+# plt.yticks() permet de définir les valeurs affichées
+# sur l'axe vertical.
+#
+# range(0, 5501, 500) signifie :
+# - commencer à 0 ;
+# - aller jusqu'à 5500 inclus ;
+# - augmenter de 500 à chaque étape.
+#
+# L'échelle affichera donc :
+# 0, 500, 1000, 1500, 2000, etc., jusqu'à 5500.
+#
+# Cela permet de comparer plus facilement la hauteur
+# des barres et de connaître approximativement
+# le nombre d'installations de chaque département.
+plt.yticks(range(0, 5501, 500))
+
+
+
+# AJOUTER UNE GRILLE HORIZONTALE
+
+
+# plt.grid() permet d'ajouter des lignes de repère
+# sur le graphique.
+#
+# axis="y" signifie que les lignes seront uniquement
+# horizontales, en suivant l'axe vertical.
+#
+# linestyle="--" donne un aspect en pointillés aux lignes.
+#
+# alpha=0.3 définit la transparence des lignes.
+# Plus cette valeur est proche de 0, plus les lignes sont discrètes.
+#
+# Cette grille permet de mieux comparer les hauteurs
+# des différentes barres.
+plt.grid(axis="y", linestyle="--", alpha=0.3)
+
+
+
+# 13. PLACER LA GRILLE DERRIERE LES BARRES
+
+
+# plt.gca() permet de récupérer les axes du graphique actuel.
+#
+# set_axisbelow(True) permet de placer la grille
+# derrière les barres.
+#
+# Cela évite que les lignes de la grille passent
+# visuellement devant les barres et gênent la lecture.
+plt.gca().set_axisbelow(True)
+
+
+
+#EXPLIQUER LE CODE 98 SOUS LE GRAPHIQUE
+
+
+# plt.figtext() permet d'ajouter du texte directement
+# dans la fenêtre générale du graphique.
+#
+# 0.5 correspond à la position horizontale du texte :
+# le texte est placé au milieu du graphique.
+#
+# 0.01 correspond à sa position verticale :
+# le texte est placé près du bas de la fenêtre.
+#
+# Le texte explique ce que représente le code 98.
+#
+# ha="center" permet de centrer le texte.
+#
+# fontsize=10 définit la taille de l'écriture.
+plt.figtext(
+    0.5, 0.01,
+    "98 : territoires dont le code INSEE commence par 98.",
+    ha="center",
+    fontsize=10
+)
+
+
+
+# AJUSTER LES ESPACES DU GRAPHIQUE
+
+
+# plt.subplots_adjust() permet de régler les marges
+# autour du graphique.
+#
+# bottom=0.22 laisse de la place en bas pour les numéros
+# des départements qui sont inclinés.
+#
+# left=0.07 règle l'espace sur le côté gauche.
+#
+# right=0.98 règle l'espace sur le côté droit.
+#
+# top=0.90 laisse de la place au-dessus pour le titre.
+#
+# Ces réglages évitent que les textes soient coupés
+# ou trop proches des bords de la fenêtre.
+plt.subplots_adjust(bottom=0.22, left=0.07, right=0.98, top=0.90)
+
+
+
+# AFFICHER LE GRAPHIQUE
+
+
+# plt.show() permet d'afficher le graphique terminé.
+#
+# Sans cette instruction, le graphique peut ne pas apparaître
+# dans certaines configurations d'exécution.
+#
+# C'est la dernière étape de notre programme graphique.
+plt.show()
