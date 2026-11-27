@@ -495,6 +495,7 @@ for techno in ["2G", "3G", "4G", "5G"]:
 etiquettes = annees[:-1] + ["2026\n(en cours)"]
 plt.xticks(annees, etiquettes)
 
+
 plt.title("Émetteurs mis en service chaque année, par technologie")
 plt.xlabel("Année de mise en service")
 plt.ylabel("Nombre d'émetteurs mis en service")
